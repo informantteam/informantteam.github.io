@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Form Saran</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+    <h2>Kirim Saran</h2>
+
+    <form id="webhookForm">
+        <input type="text" id="nama" placeholder="Nama" required />
+        <input type="number" id="id_dc" placeholder="ID Discord (18 angka)" required />
+        <input type="text" id="judul" placeholder="Judul" required />
+        <textarea id="pesan" placeholder="Isi Pesan" required></textarea>
+
+        <button type="submit">Kirim</button>
+        <p id="status"></p>
+    </form>
+</div>
+
+<script>
+const webhookURL = "https://discord.com/api/webhooks/1452760089457987694/OlzvdrXWl15y3MEaFLOqjIxmHaeciA4v6ZJ2IHwKxwQfnr9LJwOBoN2bJf0DWxKmM8tY";
+
+document.getElementById("webhookForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nama = document.getElementById("nama").value;
+    const id_dc = document.getElementById("id_dc").value.trim();
+    const judul = document.getElementById("judul").value;
+    const pesan = document.getElementById("pesan").value;
+    const status = document.getElementById("status");
+
+    // Validasi ID Discord: wajib, 18 angka
+    const idPattern = /^\d{18}$/;
+    if (!idPattern.test(id_dc)) {
+        status.textContent = "ID Discord harus terdiri dari 18 angka.";
+        status.style.color = "red";
+        return;
+    }
+
+    const data = {
+        username: "Website Form",
+        embeds: [{
+            title: judul,
+            color: 3447003,
+            fields: [
+                { name: "Nama", value: nama, inline: true },
+                { name: "ID Discord", value: id_dc, inline: true },
+                { name: "Pesan", value: pesan, inline: false }
+            ],
+            footer: {
+                text: "Dikirim dari Website"
+            },
+            timestamp: new Date().toISOString()
+        }]
+    };
+
+    fetch(webhookURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => {
+        if (res.ok) {
+            status.textContent = "Berhasil dikirim ke Discord!";
+            status.style.color = "green";
+            document.getElementById("webhookForm").reset();
+        } else {
+            status.textContent = "Gagal mengirim data.";
+            status.style.color = "red";
+        }
+    })
+    .catch(err => {
+        status.textContent = "Terjadi kesalahan.";
+        status.style.color = "red";
+        console.error(err);
+    });
+});
+</script>
+
+</body>
+</html>
