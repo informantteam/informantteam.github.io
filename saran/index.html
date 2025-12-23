@@ -35,7 +35,7 @@ document.getElementById("webhookForm").addEventListener("submit", function(e) {
     const status = document.getElementById("status");
 
     // Validasi ID Discord (18 digit)
-    const idPattern = /^\d{18}$/;
+    const idPattern = /^\d{18,19}$/;
     if (!idPattern.test(id_dc)) {
         status.textContent = "ID Discord harus terdiri dari 18 angka.";
         status.style.color = "red";
