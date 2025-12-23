@@ -49,7 +49,7 @@ document.getElementById("webhookForm").addEventListener("submit", function(e) {
             color: 3447003,
             fields: [
                 { name: "Nama", value: nama, inline: true },
-                { name: "ID Discord", value: id_dc, inline: true },
+                { name: "Discord", value: `<@${id_dc}>`, inline: true },
                 { name: "Judul", value: judul, inline: false },
                 { name: "Isi Saran", value: pesan, inline: false },
                 { 
