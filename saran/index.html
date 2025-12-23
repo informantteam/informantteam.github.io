@@ -34,10 +34,10 @@ document.getElementById("webhookForm").addEventListener("submit", function(e) {
     const pesan = document.getElementById("pesan").value;
     const status = document.getElementById("status");
 
-    // Validasi ID Discord (18 digit)
-    const idPattern = /^\d{18,19}$/;
+    // Validasi ID Discord (17-19 digit angka)
+    const idPattern = /^\d{17,19}$/;
     if (!idPattern.test(id_dc)) {
-        status.textContent = "ID Discord harus terdiri dari 18 angka.";
+        status.textContent = "ID Discord harus terdiri dari 17 hingga 19 angka.";
         status.style.color = "red";
         return;
     }
