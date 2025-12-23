@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Form Saran</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -14,10 +14,10 @@
     <form id="webhookForm">
         <input type="text" id="nama" placeholder="Nama" required />
         <input type="number" id="id_dc" placeholder="ID Discord (18 angka)" required />
-        <input type="text" id="judul" placeholder="Judul" required />
-        <textarea id="pesan" placeholder="Isi Pesan" required></textarea>
+        <input type="text" id="judul" placeholder="Judul Saran" required />
+        <textarea id="pesan" placeholder="Isi Saran" required></textarea>
 
-        <button type="submit">Kirim</button>
+        <button type="submit">Kirim Saran</button>
         <p id="status"></p>
     </form>
 </div>
@@ -34,7 +34,7 @@ document.getElementById("webhookForm").addEventListener("submit", function(e) {
     const pesan = document.getElementById("pesan").value;
     const status = document.getElementById("status");
 
-    // Validasi ID Discord: wajib, 18 angka
+    // Validasi ID Discord (18 digit)
     const idPattern = /^\d{18}$/;
     if (!idPattern.test(id_dc)) {
         status.textContent = "ID Discord harus terdiri dari 18 angka.";
@@ -43,17 +43,23 @@ document.getElementById("webhookForm").addEventListener("submit", function(e) {
     }
 
     const data = {
-        username: "Website Form",
+        username: "Website Saran",
         embeds: [{
-            title: judul,
+            title: "📩 Saran Baru",
             color: 3447003,
             fields: [
                 { name: "Nama", value: nama, inline: true },
                 { name: "ID Discord", value: id_dc, inline: true },
-                { name: "Pesan", value: pesan, inline: false }
+                { name: "Judul", value: judul, inline: false },
+                { name: "Isi Saran", value: pesan, inline: false },
+                { 
+                    name: "Ingin mengirimkan saran?", 
+                    value: "[Klik disini](https://informantteam.github.io/saran)", 
+                    inline: false 
+                }
             ],
             footer: {
-                text: "Dikirim dari Website"
+                text: "Saran hanya diterima melalui website resmi"
             },
             timestamp: new Date().toISOString()
         }]
@@ -61,23 +67,21 @@ document.getElementById("webhookForm").addEventListener("submit", function(e) {
 
     fetch(webhookURL, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
     .then(res => {
         if (res.ok) {
-            status.textContent = "Berhasil dikirim ke Discord!";
+            status.textContent = "✅ Saran berhasil dikirim ke Discord!";
             status.style.color = "green";
             document.getElementById("webhookForm").reset();
         } else {
-            status.textContent = "Gagal mengirim data.";
+            status.textContent = "❌ Gagal mengirim saran.";
             status.style.color = "red";
         }
     })
     .catch(err => {
-        status.textContent = "Terjadi kesalahan.";
+        status.textContent = "❌ Terjadi kesalahan.";
         status.style.color = "red";
         console.error(err);
     });
